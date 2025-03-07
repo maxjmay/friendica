@@ -139,6 +139,39 @@ class OAuth
 		return $application;
 	}
 
+    /**
+     * Get the application record via the provided request header fields.
+	 * This endpoint is only use for logging in with our own mobile app, and we don't want to store
+	 * the secret key on the mobile app, so need to get it from the database to be able to create the token.
+     *
+     * @param string $client_id
+     * @param string $redirect_uri
+     * @return array application record
+     */
+    public static function getApplicationForMobileAppLogin(string $client_id, string $redirect_uri)
+    {
+        // Fetch the application from the database by client_id
+        $condition = ['client_id' => $client_id];
+
+        // Retrieve the application and secret
+        $application = DBA::selectFirst('application', ['id', 'client_secret', 'redirect_uri'], $condition);
+
+        if (!DBA::isResult($application)) {
+            DI::logger()->warning('Application not found', $condition);
+            return [];
+        }
+
+        // Check if the redirect URI matches
+        $redirect_uri = strtok($redirect_uri, '?');
+        if (!in_array($redirect_uri, explode(' ', str_replace(["\n", "\r", "\t"], ' ', $application['redirect_uri'])))) {
+            DI::logger()->warning('Redirection uri does not match', ['redirect_uri' => $redirect_uri, 'application-redirect_uri' => $application['redirect_uri']]);
+            return [];
+        }
+
+        // Return the application including the client_secret
+        return $application;
+    }
+
 	/**
 	 * Check if an token for the application and user exists
 	 *
