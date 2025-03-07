@@ -7,7 +7,7 @@ use Friendica\DI;
 use Friendica\Security\OAuth;
 use Friendica\Module\BaseApi;
 use Friendica\Module\Special\HTTPException;
-use Friendica\Module\UserDeviceManager;
+use Friendica\Module\UserDeviceManager\UserDeviceManager;
 use Friendica\Model\User;
 use Friendica\Util\DateTimeFormat;
 use Psr\Http\Message\ResponseInterface;
