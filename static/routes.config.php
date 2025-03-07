@@ -476,6 +476,7 @@ return [
 
 	'/localtime'          => [Module\Debug\Localtime::class, [R::GET, R::POST]],
 	'/login'              => [Module\Security\Login::class,  [R::GET, R::POST]],
+	'/mobile/login'       => [Module\Security\LoginWithMobileApp::class,  [        R::POST]],
 	'/logout'             => [Module\Security\Logout::class, [R::GET, R::POST]],
 	'/magic'              => [Module\Magic::class,           [R::GET]],
 	'/manifest'           => [Module\Manifest::class,        [R::GET]],

@@ -1,6 +1,6 @@
 <?php
 
-namespace Friendica\Module;
+namespace Friendica\Module\Security;
 
 use Friendica\Core\Worker;
 use Friendica\DI;
