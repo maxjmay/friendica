@@ -5,6 +5,7 @@ namespace Friendica\Module\Security;
 use Friendica\Core\Worker;
 use Friendica\DI;
 use Friendica\Security\OAuth;
+use Friendica\Module\BaseApi;
 use Friendica\Module\UserDeviceManager;
 use Friendica\Model\User;
 use Friendica\Util\DateTimeFormat;
