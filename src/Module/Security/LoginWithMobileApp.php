@@ -12,12 +12,14 @@ use Friendica\Util\DateTimeFormat;
 
 class LoginWithMobileApp extends BaseApi
 {
-    public function post()
+    protected function post(array $request = [])
     {
-        $username = $this->getInput('username');
-        $password = $this->getInput('password');
-        $client_id = $this->getInput('client_id');
-        $device_push_token = $this->getInput('device_push_token');
+		$arr = ['post' => $_POST];
+        $username = $arr['post']['username'];
+        $password = $arr['post']['password'];
+        $client_id = $arr['post']['client_id'];
+        $device_push_token = $arr['post']['device_push_token'];
+        $redirect_uri = $arr['post']['redirect_uri'];
         
         // Ensure the inputs are provided
         if (empty($username) || empty($password) || empty($client_id) || empty($device_push_token)) {
@@ -25,7 +27,7 @@ class LoginWithMobileApp extends BaseApi
         }
         
         // Check if the application is valid
-        $application = OAuth::getApplicationForMobileAppLogin($client_id, $this->getInput('redirect_uri'));
+        $application = OAuth::getApplicationForMobileAppLogin($client_id, $redirect_uri);
         if (empty($application)) {
             return $this->error('Invalid client credentials.');
         }
