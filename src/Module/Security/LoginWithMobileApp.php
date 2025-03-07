@@ -6,9 +6,11 @@ use Friendica\Core\Worker;
 use Friendica\DI;
 use Friendica\Security\OAuth;
 use Friendica\Module\BaseApi;
+use Friendica\Module\Special\HTTPException;
 use Friendica\Module\UserDeviceManager;
 use Friendica\Model\User;
 use Friendica\Util\DateTimeFormat;
+use Psr\Http\Message\ResponseInterface;
 
 class LoginWithMobileApp extends BaseApi
 {
@@ -16,7 +18,7 @@ class LoginWithMobileApp extends BaseApi
 	{
 		return parent::run($httpException, $request, false);
 	}
-    
+
     protected function post(array $request = [])
     {
 		$arr = ['post' => $_POST];
