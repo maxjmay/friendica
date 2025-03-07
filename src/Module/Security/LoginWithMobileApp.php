@@ -12,6 +12,11 @@ use Friendica\Util\DateTimeFormat;
 
 class LoginWithMobileApp extends BaseApi
 {
+	public function run(HTTPException $httpException, array $request = [], bool $scopecheck = true): ResponseInterface
+	{
+		return parent::run($httpException, $request, false);
+	}
+    
     protected function post(array $request = [])
     {
 		$arr = ['post' => $_POST];
