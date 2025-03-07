@@ -3,6 +3,7 @@
 namespace Friendica\Module\UserDeviceManager;
 
 use GuzzleHttp\Client;
+use Friendica\DI;
 
 class PushNotificationManager
 {

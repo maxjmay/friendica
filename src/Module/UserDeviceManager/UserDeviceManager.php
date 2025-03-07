@@ -2,6 +2,8 @@
 
 namespace Friendica\Module\UserDeviceManager;
 
+use Friendica\Database\DBA;
+
 class UserDeviceManager
 {
     /**
