@@ -17,6 +17,7 @@ robots.txt
 !/config/local-sample.config.php
 /config/*.config.php
 /config/*.ini.php
+/config/config.php
 
 #ignore documentation, it should be newly built
 /doc/api
