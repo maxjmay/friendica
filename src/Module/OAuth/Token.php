@@ -56,7 +56,7 @@ class Token extends BaseApi
 			}
 		}
 
-		if (empty($request['client_id']) || empty($request['client_secret'])) {
+		if (empty($request['client_id']) || ($request['grant_type'] != 'refresh_token' && empty($request['client_secret']))) {
 			$this->logger->warning('Incomplete request data', ['request' => $request]);
 			$this->logAndJsonError(401, $this->errorFactory->Unauthorized('invalid_client', $this->t('Incomplete request data')));;
 		}
@@ -89,17 +89,17 @@ class Token extends BaseApi
 		} elseif ($request['grant_type'] == 'refresh_token') {
 			// Handle refresh token
 			if (empty($request['refresh_token'])) {
-				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_request', $this->t('Missing refresh token')));
+				$this->logAndJsonError(400, $this->errorFactory->UnprocessableEntity('invalid_request', $this->t('Missing refresh token')));
 			}
 	
 			$token = DBA::selectFirst('application-token', [], ['refresh_token' => $request['refresh_token']]);
 			if (!DBA::isResult($token)) {
-				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_grant', $this->t('Invalid refresh token')));
+				$this->logAndJsonError(400, $this->errorFactory->UnprocessableEntity('invalid_grant', $this->t('Invalid refresh token')));
 			}
 	
 			// Ensure the refresh token is still valid (e.g., you may want to check its expiration)
 			if ($token['expires_at'] < DateTimeFormat::utcNow()) {
-				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_grant', $this->t('Refresh token expired')));
+				$this->logAndJsonError(400, $this->errorFactory->UnprocessableEntity('invalid_grant', $this->t('Refresh token expired')));
 			}
 	
 			// Create new access token and return it
