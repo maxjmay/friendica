@@ -222,7 +222,7 @@ class OAuth
 			'follow'         => (stripos($scope, BaseApi::SCOPE_FOLLOW) !== false),
 			'push'           => (stripos($scope, BaseApi::SCOPE_PUSH) !== false),
 			'created_at'     => DateTimeFormat::utcNow(),
-			'expires_at'      => (new DateTime('+3 months'))->format('Y-m-d H:i:s')
+			'expires_at'     => (new \DateTime('now + 3 months'))->format('Y-m-d H:i:s')
 		];
 
 		foreach ([BaseApi::SCOPE_READ, BaseApi::SCOPE_WRITE, BaseApi::SCOPE_FOLLOW, BaseApi::SCOPE_PUSH] as $scope) {
