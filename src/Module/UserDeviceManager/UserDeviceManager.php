@@ -16,7 +16,7 @@ class UserDeviceManager
     public static function addDevicePushToken(int $user_id, string $device_push_token): bool
     {
         // Check if the device token already exists
-        $existingRecord = DBA::select('user-device', [], [
+        $existingRecord = DBA::selectFirst('user-device', [], [
             'device-push-token' => $device_push_token
         ]);
 
