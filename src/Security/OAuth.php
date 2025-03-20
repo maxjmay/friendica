@@ -221,7 +221,8 @@ class OAuth
 			'write'          => (stripos($scope, BaseApi::SCOPE_WRITE) !== false),
 			'follow'         => (stripos($scope, BaseApi::SCOPE_FOLLOW) !== false),
 			'push'           => (stripos($scope, BaseApi::SCOPE_PUSH) !== false),
-			'created_at'     => DateTimeFormat::utcNow()
+			'created_at'     => DateTimeFormat::utcNow(),
+			'expires_at'      => (new DateTime('+3 months'))->format('Y-m-d H:i:s')
 		];
 
 		foreach ([BaseApi::SCOPE_READ, BaseApi::SCOPE_WRITE, BaseApi::SCOPE_FOLLOW, BaseApi::SCOPE_PUSH] as $scope) {
@@ -230,7 +231,11 @@ class OAuth
 			}
 		}
 
+		Logger::warning('Add application token to the database.')
+
 		if (!DBA::insert('application-token', $fields, Database::INSERT_UPDATE)) {
+			$dbError = DBA::errorMessage();
+			Logger::warning('Application token failed to be added.', ['error' => $dbError]);
 			return [];
 		}
 
