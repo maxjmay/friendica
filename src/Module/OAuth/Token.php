@@ -110,7 +110,7 @@ class Token extends BaseApi
 			$update_fields = [
 				'access_token' => $access_token,
 				'refresh_token' => $refresh_token,
-				'expires_at' => DateTimeFormat::utcNow()->add(new \DateInterval('PT1H')),
+				'expires_at' => (new \DateTime('now + 3 months'))->format('Y-m-d H:i:s'),
 			];
 	
 			DBA::update('application-token', $update_fields, ['refresh_token' => $request['refresh_token']]);

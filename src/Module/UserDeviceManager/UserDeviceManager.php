@@ -22,7 +22,7 @@ class UserDeviceManager
 
         // If the device token exists with the same user_id, skip the insertion
         if ($existingRecord && $existingRecord['user_id'] === $user_id) {
-            return false; // No need to insert, as it's the same user and token
+            return true; // No need to insert, as it's the same user and token
         }
 
         // If the device token exists with a different user_id, delete the existing record
