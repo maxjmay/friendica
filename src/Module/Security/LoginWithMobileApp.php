@@ -59,7 +59,8 @@ class LoginWithMobileApp extends BaseApi
             // Return the token to the mobile app
             return $this->jsonExit([
                 'access_token' => $token['access_token'],
-                'expires_in' => 3600,  // Example expiration time (1 hour)
+                'refresh_token' => $token['refresh_token'],
+                'expires_in' => 3600,
                 'token_type' => 'Bearer',
             ]);
 

@@ -154,7 +154,7 @@ class OAuth
         $condition = ['client_id' => $client_id];
 
         // Retrieve the application and secret
-        $application = DBA::selectFirst('application', ['id', 'client_secret', 'redirect_uri'], $condition);
+        $application = DBA::selectFirst('application', [], $condition);
 
         if (!DBA::isResult($application)) {
             DI::logger()->warning('Application not found', $condition);
@@ -208,12 +208,14 @@ class OAuth
 	{
 		$code         = bin2hex(random_bytes(32));
 		$access_token = bin2hex(random_bytes(32));
+		$refresh_token = bin2hex(random_bytes(32));
 
 		$fields = [
 			'application-id' => $application['id'],
 			'uid'            => $uid,
 			'code'           => $code,
 			'access_token'   => $access_token,
+			'refresh_token'  => $refresh_token,
 			'scopes'         => $scope,
 			'read'           => (stripos($scope, BaseApi::SCOPE_READ) !== false),
 			'write'          => (stripos($scope, BaseApi::SCOPE_WRITE) !== false),

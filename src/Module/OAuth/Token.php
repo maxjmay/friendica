@@ -86,6 +86,41 @@ class Token extends BaseApi
 			}
 			$owner = User::getOwnerDataById($token['uid']);
 			$me = $owner['url'];
+		} elseif ($request['grant_type'] == 'refresh_token') {
+			// Handle refresh token
+			if (empty($request['refresh_token'])) {
+				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_request', $this->t('Missing refresh token')));
+			}
+	
+			$token = DBA::selectFirst('application-token', [], ['refresh_token' => $request['refresh_token']]);
+			if (!DBA::isResult($token)) {
+				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_grant', $this->t('Invalid refresh token')));
+			}
+	
+			// Ensure the refresh token is still valid (e.g., you may want to check its expiration)
+			if ($token['expires_at'] < DateTimeFormat::utcNow()) {
+				$this->logAndJsonError(400, $this->errorFactory->BadRequest('invalid_grant', $this->t('Refresh token expired')));
+			}
+	
+			// Create new access token and return it
+			$access_token = bin2hex(random_bytes(32));
+			$refresh_token = bin2hex(random_bytes(32));
+	
+			$update_fields = [
+				'access_token' => $access_token,
+				'refresh_token' => $refresh_token,
+				'expires_at' => DateTimeFormat::utcNow()->add(new \DateInterval('PT1H')),
+			];
+	
+			DBA::update('application-token', $update_fields, ['refresh_token' => $request['refresh_token']]);
+	
+			// Return the new access token and refresh token
+			return $this->sendResponse([
+				'access_token' => $access_token,
+				'refresh_token' => $refresh_token,
+				'expires_in' => 3600,
+				'token_type' => 'bearer',
+			]);
 		} else {
 			Logger::warning('Unsupported or missing grant type', ['request' => $_REQUEST]);
 			$this->logAndJsonError(422, $this->errorFactory->UnprocessableEntity($this->t('Unsupported or missing grant type')));
