@@ -231,7 +231,7 @@ class OAuth
 			}
 		}
 
-		Logger::warning('Add application token to the database.')
+		Logger::warning('Add application token to the database.');
 
 		if (!DBA::insert('application-token', $fields, Database::INSERT_UPDATE)) {
 			$dbError = DBA::errorMessage();
