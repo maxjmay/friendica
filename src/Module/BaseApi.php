@@ -147,8 +147,8 @@ class BaseApi extends BaseModule
 		return $condition;
 	}
 
-    protected function error(string $message): ResponseInterface {
-        return $this->jsonError(['error' => $message]);
+    protected function error(int $httpCode, string $message): ResponseInterface {
+        return $this->jsonError($httpCode, ['error' => $message]);
     }
 
 	/**

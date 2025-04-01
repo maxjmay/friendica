@@ -40,16 +40,16 @@ class RegisterWithMobileApp extends BaseApi
 		$arr = $_POST;
 
         if (empty($username) || empty($password) || empty($client_id) || empty($device_push_token)) {
-            return $this->error('Missing required parameters.');
+            return $this->error(400, 'Missing required parameters.');
         }
 		
         try {
             //Check if nickname contains only US-ASCII and do not start with a digit
             if (!preg_match('/^[a-zA-Z][a-zA-Z0-9]*$/', $arr['nickname'])) {
                 if (is_numeric(substr($arr['nickname'], 0, 1))) {
-                    return $this->error('Nickname cannot start with a digit.');
+                    return $this->error(422, 'Nickname cannot start with a digit.');
                 } else {
-                    return $this->error('Nickname can only contain US-ASCII characters.');
+                    return $this->error(422, 'Nickname can only contain US-ASCII characters.');
                 }
             }
             
@@ -59,14 +59,14 @@ class RegisterWithMobileApp extends BaseApi
             try {
                 $result = Model\User::create($arr);
             } catch (\Exception $e) {
-                return $this->error($e->getMessage());
+                return $this->error(500, $e->getMessage());
             }
 
             $user = $result['user'];
 
             $application = OAuth::getApplicationForMobileAppLogin($client_id, $redirect_uri);
             if (empty($application)) {
-                return $this->error('Invalid client credentials.');
+                return $this->error(401, 'Invalid client credentials.');
             }
 
             // Create an access token for the user and the application
@@ -76,7 +76,7 @@ class RegisterWithMobileApp extends BaseApi
             UserDeviceManager::addDevicePushToken($user['id'], $device_push_token);
             
             if (empty($token)) {
-                return $this->error('Failed to generate token.');
+                return $this->error(500, 'Failed to generate token.');
             }
 
             // Return the token to the mobile app
@@ -88,7 +88,7 @@ class RegisterWithMobileApp extends BaseApi
             ]);
         } catch (Exception $e) {
             DI::logger()->error('Login failed: ' . $e->getMessage());
-            return $this->error('Login failed.');
+            return $this->error(500, 'Login failed.');
         }
 	}
 }
