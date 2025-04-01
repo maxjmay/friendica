@@ -147,6 +147,10 @@ class BaseApi extends BaseModule
 		return $condition;
 	}
 
+    protected function error(string $message): ResponseInterface {
+        return $this->jsonExit(['error' => $message]);
+    }
+
 	/**
 	 * Processes data from GET requests and sets paging conditions
 	 *
