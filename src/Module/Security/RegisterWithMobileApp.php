@@ -26,7 +26,7 @@ use Friendica\Util\Proxy;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Register extends BaseApi
+class RegisterWithMobileApp extends BaseApi
 {
 
 	public function run(HTTPException $httpException, array $request = [], bool $scopecheck = true): ResponseInterface
