@@ -71,9 +71,9 @@ class RegisterWithMobileApp extends BaseApi
 
             // Create an access token for the user and the application
             $scope = 'read write follow push'; // Define the scope, adjust as needed
-            $token = OAuth::createTokenForUser($application, $user['id'], $scope);
+            $token = OAuth::createTokenForUser($application, $user['uid'], $scope);
 
-            UserDeviceManager::addDevicePushToken($user['id'], $device_push_token);
+            UserDeviceManager::addDevicePushToken($user['uid'], $device_push_token);
             
             if (empty($token)) {
                 return $this->error(500, 'Failed to generate token.');
