@@ -148,7 +148,7 @@ class BaseApi extends BaseModule
 	}
 
     protected function error(string $message): ResponseInterface {
-        return $this->jsonExit(['error' => $message]);
+        return $this->jsonError(['error' => $message]);
     }
 
 	/**

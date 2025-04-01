@@ -59,7 +59,7 @@ class RegisterWithMobileApp extends BaseApi
             try {
                 $result = Model\User::create($arr);
             } catch (\Exception $e) {
-                return $this->error('An error occurred.');
+                return $this->error($e->getMessage());
             }
 
             $user = $result['user'];
